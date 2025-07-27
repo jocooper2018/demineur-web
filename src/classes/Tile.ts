@@ -41,6 +41,9 @@ export default class Tile {
   public get mine(): boolean {
     return this._mine;
   }
+  public set mine(value: boolean) {
+    this._mine = value;
+  }
 
   public get state(): TileState {
     return this._state;
@@ -58,6 +61,9 @@ export default class Tile {
 
   public open(): void {
     if (this.minefield.isGameOver) return;
+    if (this.minefield.firstClick) {
+      this.minefield.handleFirstClick(this.position);
+    }
     this.state = "OPEN";
     if (this.mine) {
       this.minefield.gameOver();
@@ -70,7 +76,7 @@ export default class Tile {
     div.id = `tile-${this.position.x}-${this.position.y}`;
     div.className = `tile ${this.state.toLowerCase()}`;
     div.onclick = () => this.open();
-    
+
     let texture: string = DefaultTexture;
     let alt: string = "";
 
