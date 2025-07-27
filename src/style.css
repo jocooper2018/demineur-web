@@ -1,3 +1,44 @@
+:root {
+  --tile-size: 5rem;
+}
+
 body {
   margin: 0;
+}
+
+#minefield {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tile-line {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  height: var(--tile-size);
+}
+
+.tile img {
+  width: var(--tile-size);
+  height: var(--tile-size);
+  image-rendering: pixelated;
+}
+
+.tile.default {
+  cursor: pointer;
+}
+
+.tile.default:hover {
+  z-index: 1;
+  outline: 2px solid black;
+}
+
+.game-over .tile.default {
+  cursor: unset;
+}
+
+.game-over .tile.default:hover {
+  z-index: unset;
+  outline: none;
 }
