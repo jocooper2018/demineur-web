@@ -78,6 +78,15 @@ export default class Minefield {
       }
       this._tiles.push(line);
     }
+    this.htmlElement.innerHTML = "";
+    for (const tileLine of this.tiles) {
+      const htmlTileLine = document.createElement("div");
+      htmlTileLine.className = "tile-line";
+      for (const tile of tileLine) {
+        htmlTileLine.appendChild(tile.htmlElement);
+      }
+      this.htmlElement.appendChild(htmlTileLine);
+    }
     this.render();
   }
 
@@ -124,8 +133,8 @@ export default class Minefield {
     this.isGameOver = true;
   }
 
-  public getNumberOfMineAround(position: Position): number {
-    let numberOfMineAround = 0;
+  public getNumberOfMinesAround(position: Position): number {
+    let numberOfMinesAround = 0;
     for (let y = position.y - 1; y <= position.y + 1; y++) {
       for (let x = position.x - 1; x <= position.x + 1; x++) {
         if (
@@ -138,23 +147,93 @@ export default class Minefield {
           continue;
         }
         if (this.tiles[y][x].mine) {
-          numberOfMineAround++;
+          numberOfMinesAround++;
         }
       }
     }
-    return numberOfMineAround;
+    return numberOfMinesAround;
+  }
+
+  public getNumberOfFlagsAround(position: Position): number {
+    let numberOfFlagsAround = 0;
+    for (let y = position.y - 1; y <= position.y + 1; y++) {
+      for (let x = position.x - 1; x <= position.x + 1; x++) {
+        if (
+          (x === position.x && y === position.y) ||
+          x < 0 ||
+          y < 0 ||
+          x > this.tiles[0].length - 1 ||
+          y > this.tiles.length - 1
+        ) {
+          continue;
+        }
+        if (
+          this.tiles[y][x].state === "FLAG" ||
+          this.tiles[y][x].state === "FLAG-NOT-SURE"
+        ) {
+          numberOfFlagsAround++;
+        }
+      }
+    }
+    return numberOfFlagsAround;
+  }
+
+  public getNumberOfUnexploredTilesAround(position: Position): number {
+    let numberOfUnexploredTilesAround = 0;
+    for (let y = position.y - 1; y <= position.y + 1; y++) {
+      for (let x = position.x - 1; x <= position.x + 1; x++) {
+        if (
+          (x === position.x && y === position.y) ||
+          x < 0 ||
+          y < 0 ||
+          x > this.tiles[0].length - 1 ||
+          y > this.tiles.length - 1
+        ) {
+          continue;
+        }
+        if (this.tiles[y][x].state === "DEFAULT") {
+          numberOfUnexploredTilesAround++;
+        }
+      }
+    }
+    return numberOfUnexploredTilesAround;
+  }
+
+  public openAdjacentTiles(position: Position): void {
+    for (let y = position.y - 1; y <= position.y + 1; y++) {
+      for (let x = position.x - 1; x <= position.x + 1; x++) {
+        if (
+          (x === position.x && y === position.y) ||
+          x < 0 ||
+          y < 0 ||
+          x > this.tiles[0].length - 1 ||
+          y > this.tiles.length - 1 ||
+          this.tiles[y][x].state !== "DEFAULT"
+        ) {
+          continue;
+        }
+        this.tiles[y][x].open();
+      }
+    }
+  }
+
+  public closeAllOtherPopup(position: Position): void {
+    for (const tileLine of this.tiles) {
+      for (const tile of tileLine) {
+        if (tile.position.x === position.x && tile.position.y === position.y) {
+          continue;
+        }
+        tile.closePopup();
+      }
+    }
   }
 
   public render(): void {
-    this.htmlElement.innerHTML = "";
     this.htmlElement.className = this.isGameOver ? "game-over" : "";
     for (const tileLine of this.tiles) {
-      const htmlTileLine = document.createElement("div");
-      htmlTileLine.className = "tile-line";
       for (const tile of tileLine) {
-        htmlTileLine.appendChild(tile.render());
+        tile.render();
       }
-      this.htmlElement.appendChild(htmlTileLine);
     }
   }
 }

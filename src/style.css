@@ -1,15 +1,33 @@
 :root {
+  --green-1: #8bb842;
+  --green-2: #459c28;
+  --green-3: #14783c;
+  
   --tile-size: 5rem;
 }
 
 body {
   margin: 0;
+  background-color: var(--green-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+button:enabled {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 #minefield {
   display: flex;
   flex-direction: column;
   gap: 0;
+  border: 0.5rem solid var(--green-3);
 }
 
 .tile-line {
@@ -19,26 +37,62 @@ body {
   height: var(--tile-size);
 }
 
+.tile {
+  position: relative;
+}
+
 .tile img {
   width: var(--tile-size);
   height: var(--tile-size);
   image-rendering: pixelated;
 }
 
-.tile.default {
+.tile.can-dig {
   cursor: pointer;
 }
 
-.tile.default:hover {
+.tile.can-dig:hover {
   z-index: 1;
   outline: 2px solid black;
 }
 
-.game-over .tile.default {
+.game-over .tile.can-dig {
   cursor: unset;
 }
 
-.game-over .tile.default:hover {
+.game-over .tile.can-dig:hover {
   z-index: unset;
   outline: none;
+}
+
+.dig-popup {
+  position: absolute;
+  z-index: 2;
+  top: -1rem;
+  left: calc(var(--tile-size) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  border: 0.5rem solid var(--green-2);
+  background-color: #fff;
+  box-shadow: 0 0 0.5rem #0007;
+}
+
+.dig-popup button {
+  white-space: nowrap;
+  padding: 0;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+.dig-popup button img {
+  width: 100%;
+  height: 100%;
+}
+
+.dig-popup button:hover {
+  outline: 2px solid black;
+  z-index: 1;
 }
