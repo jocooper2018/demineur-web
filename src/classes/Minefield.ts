@@ -1,22 +1,41 @@
 import type Position from "../interfaces/Position";
 import { randomPosition } from "../utils/random";
 import Tile from "./Tile";
+import type Timer from "./Timer";
 
 export default class Minefield {
-  private _htmlElement: HTMLDivElement;
+  private _htmlElement: HTMLElement;
+  private _timer: Timer;
   private _tiles: Tile[][];
   private _isGameOver: boolean;
+  private _won: boolean;
   private _firstClick: boolean;
+  private _numberOfMinesRemainingIndicator: HTMLElement;
 
-  constructor(htmlElement: HTMLDivElement) {
+  constructor(
+    htmlElement: HTMLElement,
+    timer: Timer,
+    numberOfMinesRemainingIndicator: HTMLElement
+  ) {
     this._htmlElement = htmlElement;
     this._tiles = [];
     this._isGameOver = false;
+    this._won = false;
     this._firstClick = true;
+    this._timer = timer;
+    this._numberOfMinesRemainingIndicator = numberOfMinesRemainingIndicator;
   }
 
-  public get htmlElement(): HTMLDivElement {
+  public get htmlElement(): HTMLElement {
     return this._htmlElement;
+  }
+
+  public get timer(): Timer {
+    return this._timer;
+  }
+
+  public get numberOfMinesRemainingIndicator(): HTMLElement {
+    return this._numberOfMinesRemainingIndicator;
   }
 
   private get tiles(): Tile[][] {
@@ -33,11 +52,37 @@ export default class Minefield {
     this._isGameOver = value;
   }
 
+  public get won(): boolean {
+    return this._won;
+  }
+  private set won(value: boolean) {
+    this._won = value;
+  }
+
   public get firstClick(): boolean {
     return this._firstClick;
   }
   private set firstClick(value: boolean) {
+    if (this.firstClick && !value) {
+      this.timer.start();
+    }
     this._firstClick = value;
+  }
+
+  public get numberOfMinesRemaining(): number {
+    let numberOfMines: number = 0;
+    let numberOfFlags: number = 0;
+    for (const tileLine of this.tiles) {
+      for (const tile of tileLine) {
+        if (tile.state === "FLAG") {
+          numberOfFlags++;
+        }
+        if (tile.mine) {
+          numberOfMines++;
+        }
+      }
+    }
+    return numberOfMines - numberOfFlags;
   }
 
   public newGame(width: number, height: number, mineNumber: number): void {
@@ -62,6 +107,7 @@ export default class Minefield {
     }
 
     this.isGameOver = false;
+    this.won = false;
     this.firstClick = true;
     this.tiles = [];
     for (let y = 0; y < height; y++) {
@@ -87,7 +133,13 @@ export default class Minefield {
       }
       this.htmlElement.appendChild(htmlTileLine);
     }
+    this.updateNumberOfMinesRemainingIndicator()
     this.render();
+  }
+
+  public updateNumberOfMinesRemainingIndicator(): void {
+    this.numberOfMinesRemainingIndicator.innerText =
+      this.numberOfMinesRemaining.toString();
   }
 
   public handleFirstClick(position: Position) {
@@ -129,8 +181,33 @@ export default class Minefield {
     }
   }
 
-  public gameOver(): void {
+  public gameOver(won: boolean): void {
+    this.timer.stop();
     this.isGameOver = true;
+    this.won = won;
+
+    if (this.won) {
+      console.log(`Gagné en ${this.timer.toString()}`);
+    }
+  }
+
+  public checkIfItsAWin(): void {
+    if (this.isGameOver) return;
+    let numberOfMines: number = 0;
+    let numberOfUnexcavatedTiles: number = 0;
+    for (const tileLine of this.tiles) {
+      for (const tile of tileLine) {
+        if (tile.state !== "OPEN") {
+          numberOfUnexcavatedTiles++;
+        }
+        if (tile.mine) {
+          numberOfMines++;
+        }
+      }
+    }
+    if (numberOfMines === numberOfUnexcavatedTiles) {
+      this.gameOver(true);
+    }
   }
 
   public getNumberOfMinesAround(position: Position): number {

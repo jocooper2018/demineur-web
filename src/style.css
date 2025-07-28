@@ -2,7 +2,7 @@
   --green-1: #8bb842;
   --green-2: #459c28;
   --green-3: #14783c;
-  
+
   --tile-size: 5rem;
 }
 
@@ -10,9 +10,14 @@ body {
   margin: 0;
   background-color: var(--green-2);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100vw;
   min-height: 100vh;
+}
+
+h1 {
+  margin: 0;
 }
 
 button:enabled {
@@ -23,10 +28,39 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#minefield-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #minefield {
   display: flex;
   flex-direction: column;
   gap: 0;
+  padding: 0.25rem;
+  border: 0.5rem solid var(--green-3);
+}
+
+#tmp {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 20rem;
+  padding: 2rem;
+  background-color: var(--green-1);
+  border-left: 0.5rem solid var(--green-3);
+}
+
+#timer {
+  font-family: monospace;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  background-color: black;
+  color: var(--green-1);
   border: 0.5rem solid var(--green-3);
 }
 
@@ -53,7 +87,7 @@ button:disabled {
 
 .tile.can-dig:hover {
   z-index: 1;
-  outline: 2px solid black;
+  outline: 2px solid white;
 }
 
 .game-over .tile.can-dig {
@@ -93,6 +127,6 @@ button:disabled {
 }
 
 .dig-popup button:hover {
-  outline: 2px solid black;
+  outline: 2px solid white;
   z-index: 1;
 }

@@ -125,6 +125,7 @@ export default class Tile {
         flagButton.onclick = () => {
           this.state = "DEFAULT";
           this.render();
+          this.minefield.updateNumberOfMinesRemainingIndicator();
         };
       } else {
         const flagButtonImg = document.createElement("img");
@@ -135,6 +136,7 @@ export default class Tile {
         flagButton.onclick = () => {
           this.state = "FLAG";
           this.render();
+          this.minefield.updateNumberOfMinesRemainingIndicator();
         };
       }
       popup.appendChild(flagButton);
@@ -190,9 +192,12 @@ export default class Tile {
     }
     this.state = "OPEN";
     if (this.mine) {
-      this.minefield.gameOver();
-    } else if (this.numberOfFlagsAround === this.numberOfMinesAround) {
-      this.minefield.openAdjacentTiles(this.position);
+      this.minefield.gameOver(false);
+    } else {
+      this.minefield.checkIfItsAWin();
+      if (this.numberOfFlagsAround === this.numberOfMinesAround) {
+        this.minefield.openAdjacentTiles(this.position);
+      }
     }
     this.minefield.render();
   }
