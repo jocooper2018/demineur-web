@@ -109,6 +109,7 @@ export default class Tile {
       digButtonImg.src = ShovelTexture;
       digButtonImg.alt = "Dig";
       digButton.appendChild(digButtonImg);
+      digButton.type = "button";
       digButton.title = "Dig";
       digButton.onclick = () => this.open();
       popup.appendChild(digButton);
@@ -121,6 +122,7 @@ export default class Tile {
         flagButtonImg.src = NoMineTexture;
         flagButtonImg.alt = "Remove the flag.";
         flagButton.appendChild(flagButtonImg);
+        flagButton.type = "button";
         flagButton.title = "Remove the flag.";
         flagButton.onclick = () => {
           this.state = "DEFAULT";
@@ -132,6 +134,7 @@ export default class Tile {
         flagButtonImg.src = FlagTexture;
         flagButtonImg.alt = "Put a flag here.";
         flagButton.appendChild(flagButtonImg);
+        flagButton.type = "button";
         flagButton.title = "Put a flag here.";
         flagButton.onclick = () => {
           this.state = "FLAG";
@@ -147,6 +150,7 @@ export default class Tile {
         flagButtonImg.src = NoMineTexture;
         flagButtonImg.alt = "Remove the flag.";
         flagNotSureButton.appendChild(flagButtonImg);
+        flagNotSureButton.type = "button";
         flagNotSureButton.title = "Remove the flag.";
         flagNotSureButton.onclick = () => {
           this.state = "DEFAULT";
@@ -157,6 +161,7 @@ export default class Tile {
         flagButtonImg.src = FlagNotSureTexture;
         flagButtonImg.alt = "Put a flag with a question mark here.";
         flagNotSureButton.appendChild(flagButtonImg);
+        flagNotSureButton.type = "button";
         flagNotSureButton.title = "Put a flag with a question mark here.";
         flagNotSureButton.onclick = () => {
           this.state = "FLAG-NOT-SURE";
@@ -171,6 +176,7 @@ export default class Tile {
     closeButtonImg.src = CrossTexture;
     closeButtonImg.alt = "Close popup";
     closeButton.appendChild(closeButtonImg);
+    closeButton.type = "button";
     closeButton.title = "Close popup";
     closeButton.onclick = () => this.closePopup();
     popup.appendChild(closeButton);

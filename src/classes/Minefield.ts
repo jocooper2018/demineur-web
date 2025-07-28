@@ -1,10 +1,12 @@
 import type Position from "../interfaces/Position";
 import { randomPosition } from "../utils/random";
+import { remToPx, sleep } from "../utils/utils";
 import Tile from "./Tile";
 import type Timer from "./Timer";
 
 export default class Minefield {
   private _htmlElement: HTMLElement;
+  private _container: HTMLElement;
   private _timer: Timer;
   private _tiles: Tile[][];
   private _isGameOver: boolean;
@@ -14,10 +16,12 @@ export default class Minefield {
 
   constructor(
     htmlElement: HTMLElement,
+    container: HTMLElement,
     timer: Timer,
     numberOfMinesRemainingIndicator: HTMLElement
   ) {
     this._htmlElement = htmlElement;
+    this._container = container;
     this._tiles = [];
     this._isGameOver = false;
     this._won = false;
@@ -28,6 +32,10 @@ export default class Minefield {
 
   public get htmlElement(): HTMLElement {
     return this._htmlElement;
+  }
+
+  public get container(): HTMLElement {
+    return this._container;
   }
 
   public get timer(): Timer {
@@ -43,6 +51,14 @@ export default class Minefield {
   }
   private set tiles(value: Tile[][]) {
     this._tiles = value;
+  }
+
+  public get width(): number {
+    return this.tiles[0].length;
+  }
+
+  public get height(): number {
+    return this.tiles.length;
   }
 
   public get isGameOver(): boolean {
@@ -105,7 +121,7 @@ export default class Minefield {
       } while (!ok);
       minesPositions.push(position);
     }
-
+    this.timer.reset();
     this.isGameOver = false;
     this.won = false;
     this.firstClick = true;
@@ -133,8 +149,12 @@ export default class Minefield {
       }
       this.htmlElement.appendChild(htmlTileLine);
     }
-    this.updateNumberOfMinesRemainingIndicator()
+    this.updateNumberOfMinesRemainingIndicator();
     this.render();
+    (async () => {
+      sleep(0);
+      this.resize(this.container.clientWidth, this.container.clientHeight);
+    })();
   }
 
   public updateNumberOfMinesRemainingIndicator(): void {
@@ -244,10 +264,7 @@ export default class Minefield {
         ) {
           continue;
         }
-        if (
-          this.tiles[y][x].state === "FLAG" ||
-          this.tiles[y][x].state === "FLAG-NOT-SURE"
-        ) {
+        if (this.tiles[y][x].state === "FLAG") {
           numberOfFlagsAround++;
         }
       }
@@ -311,6 +328,20 @@ export default class Minefield {
       for (const tile of tileLine) {
         tile.render();
       }
+    }
+  }
+
+  public resize(containerWidth: number, containerHeight: number) {
+    const containerRatio: number = containerWidth / containerHeight;
+    const minefieldRatio: number = this.width / this.height;
+    if (containerRatio > minefieldRatio) {
+      this.htmlElement.style = `--tile-size: ${
+        containerHeight / this.height - remToPx(5) / this.height
+      }px;`;
+    } else {
+      this.htmlElement.style = `--tile-size: ${
+        containerWidth / this.width - remToPx(5) / this.width
+      }px;`;
     }
   }
 }

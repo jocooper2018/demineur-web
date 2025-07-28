@@ -69,6 +69,8 @@ export default class Timer {
   public reset(): void {
     this.startTimestamp = null;
     this.endTimestamp = null;
+    this.intervalId && clearInterval(this.intervalId);
+    this.render();
   }
 
   public render(): void {
