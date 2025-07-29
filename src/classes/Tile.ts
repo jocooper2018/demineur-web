@@ -205,7 +205,7 @@ export default class Tile {
         this.minefield.openAdjacentTiles(this.position);
       }
     }
-    this.minefield.render();
+    this.render();
   }
 
   public render(): void {

@@ -205,10 +205,7 @@ export default class Minefield {
     this.timer.stop();
     this.isGameOver = true;
     this.won = won;
-
-    if (this.won) {
-      console.log(`Gagné en ${this.timer.toString()}`);
-    }
+    this.render();
   }
 
   public checkIfItsAWin(): void {
