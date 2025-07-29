@@ -16,6 +16,15 @@ const minefieldContainer = document.getElementById(
   "minefield-container"
 ) as HTMLDivElement;
 
+const difficultySelect = document.getElementById(
+  "difficulty-select"
+) as HTMLSelectElement;
+const widthInput = document.getElementById("width-input") as HTMLInputElement;
+const heightInput = document.getElementById("height-input") as HTMLInputElement;
+const numberOfMinesInput = document.getElementById(
+  "number-of-mines-input"
+) as HTMLInputElement;
+
 const minefield: Minefield = new Minefield(
   minefieldHtmlElement,
   minefieldContainer,
@@ -23,9 +32,118 @@ const minefield: Minefield = new Minefield(
   numberOfMinesRemainingIndicator
 );
 
-newGameButton.onclick = () => minefield.newGame(8, 8, 8);
+type InputType =
+  | "NONE"
+  | "DIFFICULTY-SELECT"
+  | "WIDTH-INPUT"
+  | "HEIGHT-INPUT"
+  | "NUMBER-OF-MINES-INPUT";
 
-minefield.newGame(16, 16, 32);
+let inputType: InputType = "NONE";
+
+const updateInputs = (_inputType: InputType) => {
+  if (inputType === "NONE") {
+    inputType = _inputType;
+    if (
+      numberOfMinesInput.value === "1" ||
+      Number(numberOfMinesInput.value) ===
+        Number(widthInput.value) * Number(heightInput.value) - 9
+    ) {
+      difficultySelect.value = "none";
+    } else if (
+      Number(numberOfMinesInput.value) /
+        (Number(widthInput.value) * Number(heightInput.value)) <
+      0.15625
+    ) {
+      difficultySelect.value = "easy";
+    } else if (
+      Number(numberOfMinesInput.value) /
+        (Number(widthInput.value) * Number(heightInput.value)) <
+      0.21875
+    ) {
+      difficultySelect.value = "medium";
+    } else if (
+      Number(numberOfMinesInput.value) /
+        (Number(widthInput.value) * Number(heightInput.value)) <
+      0.375
+    ) {
+      difficultySelect.value = "hard";
+    } else {
+      difficultySelect.value = "impossible";
+    }
+    inputType = "NONE";
+  }
+  numberOfMinesInput.max = `${
+    Number(widthInput.value) * Number(heightInput.value) - 9
+  }`;
+};
+
+difficultySelect.onchange = () => {
+  if (inputType === "NONE") {
+    inputType = "DIFFICULTY-SELECT";
+    switch (difficultySelect.value) {
+      case "none":
+        widthInput.value = "8";
+        heightInput.value = "8";
+        numberOfMinesInput.value = "1";
+        break;
+      case "easy":
+        widthInput.value = "8";
+        heightInput.value = "8";
+        numberOfMinesInput.value = "8";
+        break;
+      case "medium":
+        widthInput.value = "16";
+        heightInput.value = "16";
+        numberOfMinesInput.value = "48";
+        break;
+      case "hard":
+        widthInput.value = "32";
+        heightInput.value = "32";
+        numberOfMinesInput.value = "256";
+        break;
+      case "impossible":
+        widthInput.value = "32";
+        heightInput.value = "32";
+        numberOfMinesInput.value = "512";
+        break;
+      default:
+        break;
+    }
+    inputType = "NONE";
+  }
+  numberOfMinesInput.max = `${
+    Number(widthInput.value) * Number(heightInput.value) - 9
+  }`;
+};
+widthInput.onchange = () => {
+  updateInputs("WIDTH-INPUT");
+};
+heightInput.onchange = () => {
+  updateInputs("HEIGHT-INPUT");
+};
+numberOfMinesInput.onchange = () => {
+  updateInputs("NUMBER-OF-MINES-INPUT");
+};
+
+const newGame = () => {
+  const width: number = Number(widthInput.value);
+  const height: number = Number(heightInput.value);
+  const numberOfMines: number = Number(numberOfMinesInput.value);
+  if (
+    Number.isNaN(width) ||
+    Number.isNaN(height) ||
+    Number.isNaN(numberOfMines)
+  ) {
+    console.error("NaN");
+    return;
+  }
+  minefield.newGame(width, height, numberOfMines);
+};
+
+newGameButton.onclick = () => newGame();
+
+newGame();
 
 window.addEventListener("resize", () => {
   minefield.resize(
