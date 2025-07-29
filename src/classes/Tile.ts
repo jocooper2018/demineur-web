@@ -126,7 +126,7 @@ export default class Tile {
         flagButton.title = "Remove the flag.";
         flagButton.onclick = () => {
           this.state = "DEFAULT";
-          this.render();
+          this.closePopup();
           this.minefield.updateNumberOfMinesRemainingIndicator();
         };
       } else {
@@ -138,7 +138,7 @@ export default class Tile {
         flagButton.title = "Put a flag here.";
         flagButton.onclick = () => {
           this.state = "FLAG";
-          this.render();
+          this.closePopup();
           this.minefield.updateNumberOfMinesRemainingIndicator();
         };
       }
@@ -154,7 +154,7 @@ export default class Tile {
         flagNotSureButton.title = "Remove the flag.";
         flagNotSureButton.onclick = () => {
           this.state = "DEFAULT";
-          this.render();
+          this.closePopup();
         };
       } else {
         const flagButtonImg = document.createElement("img");
@@ -165,7 +165,7 @@ export default class Tile {
         flagNotSureButton.title = "Put a flag with a question mark here.";
         flagNotSureButton.onclick = () => {
           this.state = "FLAG-NOT-SURE";
-          this.render();
+          this.closePopup();
         };
       }
       popup.appendChild(flagNotSureButton);
