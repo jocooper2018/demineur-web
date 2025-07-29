@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/demineur-web/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demineur web</title>
+    <script type="module" crossorigin src="/demineur-web/assets/index-DHnycb36.js"></script>
+    <link rel="stylesheet" crossorigin href="/demineur-web/assets/index-d_-xNA33.css">
+  </head>
+  <body>
+    <div id="minefield-container">
+      <div id="minefield">This website does not work without JavaScript.</div>
+    </div>
+    <div id="side-panel">
+      <h1>Demineur</h1>
+      <div id="timer">00:00</div>
+      <div>
+        <span id="number-of-mines-remaining">N</span
+        ><span> mines remaining.</span>
+      </div>
+      <section id="new-game-section">
+        <h2>New Game</h2>
+        <label for="difficulty-select">
+          <span>Difficulty:</span>
+          <select name="difficulty-select" id="difficulty-select">
+            <option value="none">None</option>
+            <option value="easy" selected>Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="impossible">Impossible</option>
+          </select>
+        </label>
+        <label for="width-input">
+          <span>Width:</span>
+          <input
+            type="number"
+            name="width-input"
+            id="width-input"
+            min="1"
+            max="64"
+            value="8"
+          />
+        </label>
+        <label for="height-input">
+          <span>Height:</span>
+          <input
+            type="number"
+            name="height-input"
+            id="height-input"
+            min="1"
+            max="64"
+            value="8"
+          />
+        </label>
+        <label for="number-of-mines-input">
+          <span>Number of mines:</span>
+          <input
+            type="number"
+            name="number-of-mines-input"
+            id="number-of-mines-input"
+            min="1"
+            max="55"
+            value="16"
+          />
+        </label>
+        <button type="button" id="new-game-button">Start</button>
+      </section>
+    </div>
+  </body>
+</html>
