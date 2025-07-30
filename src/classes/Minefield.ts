@@ -153,7 +153,7 @@ export default class Minefield {
     this.render();
     (async () => {
       sleep(0);
-      this.resize(this.container.clientWidth, this.container.clientHeight);
+      this.resize();
     })();
   }
 
@@ -328,17 +328,31 @@ export default class Minefield {
     }
   }
 
-  public resize(containerWidth: number, containerHeight: number) {
-    const containerRatio: number = containerWidth / containerHeight;
+  public resize() {
+    const containerRatio: number =
+      this.container.clientWidth / this.container.clientHeight;
     const minefieldRatio: number = this.width / this.height;
     if (containerRatio > minefieldRatio) {
       this.htmlElement.style = `--tile-size: ${
-        containerHeight / this.height - remToPx(5) / this.height
+        this.container.clientHeight / this.height - remToPx(5) / this.height
       }px;`;
     } else {
       this.htmlElement.style = `--tile-size: ${
-        containerWidth / this.width - remToPx(5) / this.width
+        this.container.clientWidth / this.width - remToPx(5) / this.width
       }px;`;
+    }
+
+    const minefieldRect = this.htmlElement.getBoundingClientRect();
+    const containerRect = this.container.getBoundingClientRect();
+    if (minefieldRect.width + remToPx(4) > containerRect.width) {
+      this.container.classList.add("scroll-x");
+    } else {
+      this.container.classList.remove("scroll-x");
+    }
+    if (minefieldRect.height + remToPx(4) > containerRect.height) {
+      this.container.classList.add("scroll-y");
+    } else {
+      this.container.classList.remove("scroll-y");
     }
   }
 }

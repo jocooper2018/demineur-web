@@ -11,6 +11,7 @@ body {
   margin: 0;
   background-color: var(--green-2);
   display: flex;
+  flex-direction: row;
   align-items: stretch;
   justify-content: stretch;
   width: 100vw;
@@ -73,7 +74,15 @@ input:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: scroll;
+}
+
+#minefield-container.scroll-x {
+  justify-content: flex-start;
+}
+
+#minefield-container.scroll-y {
+  align-items: flex-start;
 }
 
 #minefield {
@@ -82,6 +91,7 @@ input:hover {
   gap: 0;
   padding: 0.25rem;
   border: 0.5rem solid var(--green-3);
+  margin: 2rem;
 }
 
 #side-panel {
@@ -91,10 +101,11 @@ input:hover {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  width: 15rem;
+  width: 16rem;
   padding: 2rem;
   background-color: var(--green-1);
   border-left: 0.5rem solid var(--green-3);
+  overflow-y: scroll;
 }
 
 #timer {
@@ -121,6 +132,10 @@ input:hover {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+#new-game-mobile-button {
+  display: none;
 }
 
 .tile-line {
@@ -162,9 +177,10 @@ input:hover {
 }
 
 .dig-popup {
+  cursor: auto;
   position: absolute;
   z-index: 2;
-  top: -1rem;
+  top: -2rem;
   left: calc(var(--tile-size) / 2);
   transform: translateX(-50%);
   display: flex;
@@ -173,6 +189,17 @@ input:hover {
   border: 0.5rem solid var(--green-2);
   background-color: #fff;
   box-shadow: 0 0 0.5rem #0007;
+}
+
+.dig-popup.near-left-edge {
+  transform: unset;
+  left: -2rem;
+}
+
+.dig-popup.near-right-edge {
+  transform: unset;
+  left: unset;
+  right: -2rem;
 }
 
 .dig-popup button {
@@ -191,4 +218,47 @@ input:hover {
 .dig-popup button:hover {
   outline: 2px solid white;
   z-index: 1;
+}
+
+@media screen and (orientation: portrait) {
+  body {
+    flex-direction: column-reverse;
+  }
+
+  #side-panel {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-left: none;
+    width: unset;
+    border-bottom: 0.5rem solid var(--green-3);
+  }
+
+  #new-game-section {
+    position: absolute;
+    display: none;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    width: 15rem;
+    background-color: var(--green-1);
+  }
+
+  #new-game-section.open {
+    display: flex;
+  }
+
+  #new-game-mobile-button {
+    display: block;
+    position: absolute;
+    bottom: 2rem;
+    left: 50vw;
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (max-width: 33rem) {
+  h1 {
+    display: none;
+  }
 }

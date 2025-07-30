@@ -183,6 +183,14 @@ export default class Tile {
 
     this.htmlElement.appendChild(popup);
     this.isPopupOpen = true;
+
+    const popupRect = popup.getBoundingClientRect();
+    const containerRect = this.minefield.container.getBoundingClientRect();
+    if (popupRect.left < containerRect.left) {
+      popup.classList.add("near-left-edge");
+    } else if (popupRect.right > containerRect.right) {
+      popup.classList.add("near-right-edge");
+    }
   }
 
   public closePopup(): void {

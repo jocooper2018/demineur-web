@@ -12,10 +12,15 @@ const numberOfMinesRemainingIndicator = document.getElementById(
 const newGameButton = document.getElementById(
   "new-game-button"
 ) as HTMLButtonElement;
+const newGameMobileButton = document.getElementById(
+  "new-game-mobile-button"
+) as HTMLButtonElement;
 const minefieldContainer = document.getElementById(
   "minefield-container"
 ) as HTMLDivElement;
-
+const newGameSection = document.getElementById(
+  "new-game-section"
+) as HTMLElement;
 const difficultySelect = document.getElementById(
   "difficulty-select"
 ) as HTMLSelectElement;
@@ -139,6 +144,7 @@ const newGame = () => {
     return;
   }
   minefield.newGame(width, height, numberOfMines);
+  newGameSection.classList.remove("open");
 };
 
 newGameButton.onclick = () => newGame();
@@ -146,8 +152,13 @@ newGameButton.onclick = () => newGame();
 newGame();
 
 window.addEventListener("resize", () => {
-  minefield.resize(
-    minefieldContainer.clientWidth,
-    minefieldContainer.clientHeight
-  );
+  minefield.resize();
 });
+
+newGameMobileButton.onclick = () => {
+  if (newGameSection.classList.contains("open")) {
+    newGameSection.classList.remove("open");
+  } else {
+    newGameSection.classList.add("open");
+  }
+};
