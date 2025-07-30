@@ -143,8 +143,14 @@ const newGame = () => {
     console.error("NaN");
     return;
   }
-  minefield.newGame(width, height, numberOfMines);
-  newGameSection.classList.remove("open");
+  try {
+    minefield.newGame(width, height, numberOfMines);
+    newGameSection.classList.remove("open");
+  } catch (error) {
+    if (error instanceof Error && error.message === "To much mines") {
+      alert("Error: To much mines");
+    }
+  }
 };
 
 newGameButton.onclick = () => newGame();

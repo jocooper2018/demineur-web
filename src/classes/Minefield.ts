@@ -103,7 +103,7 @@ export default class Minefield {
 
   public newGame(width: number, height: number, mineNumber: number): void {
     if (mineNumber > width * height - 9) {
-      throw new Error("To much mine");
+      throw new Error("To much mines");
     }
     const minesPositions: Position[] = [];
     for (let i = 0; i < mineNumber; i++) {
