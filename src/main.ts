@@ -1,6 +1,7 @@
 import "./style.css";
 import Minefield from "./classes/Minefield";
 import Timer from "./classes/Timer";
+import ScoreBoard from "./classes/ScoreBoard";
 
 const minefieldHtmlElement = document.getElementById(
   "minefield"
@@ -29,12 +30,16 @@ const heightInput = document.getElementById("height-input") as HTMLInputElement;
 const numberOfMinesInput = document.getElementById(
   "number-of-mines-input"
 ) as HTMLInputElement;
+const scoreBoardList = document.querySelector(
+  "#score-board ul"
+) as HTMLUListElement;
 
 const minefield: Minefield = new Minefield(
   minefieldHtmlElement,
   minefieldContainer,
   new Timer(timer),
-  numberOfMinesRemainingIndicator
+  numberOfMinesRemainingIndicator,
+  new ScoreBoard(scoreBoardList)
 );
 
 type InputType =
@@ -83,7 +88,7 @@ const updateInputs = (_inputType: InputType) => {
   }`;
 };
 
-difficultySelect.onchange = () => {
+difficultySelect.oninput = () => {
   if (inputType === "NONE") {
     inputType = "DIFFICULTY-SELECT";
     switch (difficultySelect.value) {
@@ -121,13 +126,13 @@ difficultySelect.onchange = () => {
     Number(widthInput.value) * Number(heightInput.value) - 9
   }`;
 };
-widthInput.onchange = () => {
+widthInput.oninput = () => {
   updateInputs("WIDTH-INPUT");
 };
-heightInput.onchange = () => {
+heightInput.oninput = () => {
   updateInputs("HEIGHT-INPUT");
 };
-numberOfMinesInput.onchange = () => {
+numberOfMinesInput.oninput = () => {
   updateInputs("NUMBER-OF-MINES-INPUT");
 };
 

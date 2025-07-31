@@ -1,6 +1,7 @@
 import type Position from "../interfaces/Position";
 import { randomPosition } from "../utils/random";
 import { remToPx, sleep } from "../utils/utils";
+import type ScoreBoard from "./ScoreBoard";
 import Tile from "./Tile";
 import type Timer from "./Timer";
 
@@ -13,12 +14,14 @@ export default class Minefield {
   private _won: boolean;
   private _firstClick: boolean;
   private _numberOfMinesRemainingIndicator: HTMLElement;
+  private _scoreBoard: ScoreBoard;
 
   constructor(
     htmlElement: HTMLElement,
     container: HTMLElement,
     timer: Timer,
-    numberOfMinesRemainingIndicator: HTMLElement
+    numberOfMinesRemainingIndicator: HTMLElement,
+    scoreBoard: ScoreBoard
   ) {
     this._htmlElement = htmlElement;
     this._container = container;
@@ -28,6 +31,7 @@ export default class Minefield {
     this._firstClick = true;
     this._timer = timer;
     this._numberOfMinesRemainingIndicator = numberOfMinesRemainingIndicator;
+    this._scoreBoard = scoreBoard;
   }
 
   public get htmlElement(): HTMLElement {
@@ -46,6 +50,10 @@ export default class Minefield {
     return this._numberOfMinesRemainingIndicator;
   }
 
+  public get scoreBoard(): ScoreBoard {
+    return this._scoreBoard;
+  }
+
   private get tiles(): Tile[][] {
     return this._tiles;
   }
@@ -59,6 +67,18 @@ export default class Minefield {
 
   public get height(): number {
     return this.tiles.length;
+  }
+
+  public get numberOfMines(): number {
+    let numberOfMines: number = 0;
+    for (const tileLine of this.tiles) {
+      for (const tile of tileLine) {
+        if (tile.mine) {
+          numberOfMines++;
+        }
+      }
+    }
+    return numberOfMines;
   }
 
   public get isGameOver(): boolean {
@@ -206,6 +226,14 @@ export default class Minefield {
     this.isGameOver = true;
     this.won = won;
     this.render();
+    if (won) {
+      this.scoreBoard.saveScore(
+        this.width,
+        this.height,
+        this.numberOfMines,
+        this.timer
+      );
+    }
   }
 
   public checkIfItsAWin(): void {

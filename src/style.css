@@ -108,6 +108,12 @@ input:hover {
   overflow-y: scroll;
 }
 
+#side-panel section {
+  align-self: stretch;
+  padding: 1rem;
+  border: 2px solid var(--green-3);
+}
+
 #timer {
   font-family: monospace;
   font-size: 2rem;
@@ -123,8 +129,6 @@ input:hover {
   flex-direction: column;
   align-items: stretch;
   gap: 1rem;
-  padding: 1rem;
-  border: 2px solid var(--green-3);
 }
 
 #new-game-section label {
